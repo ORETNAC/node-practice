@@ -1,0 +1,12 @@
+{
+    "users":[
+        {
+            "nombre":"jose",
+            "apellido":"Cantero"
+        },
+        {
+            "nombre":"David",
+            "apellido":"Carreño"
+        }
+    ]
+}
