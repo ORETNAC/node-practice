@@ -26,9 +26,43 @@ expressServer.post('/mi-cuenta', (req,res)=>{ // De esta manera se consiguen 2 f
 ////IMPORTANT 'params' property------------------------------------------------------------------------------------------------
 expressServer.get('/mi-cuenta/:user/:password',(req,res)=>{//En ciertas ocaciones se requieren parametros en la ruta, por ejemplo identificadores de usuario, si ponemos solo '/mi-cuenta' no servirá de mucho porque es algo estatico, por lo tanto se utiliza ':idcuenta' para decirle a la función que todo lo que venga despues del : es lo que necesito como identificador
     //Cuidado con los caracteres especiales en las rutas con valor dinamico, contraseña da muchos problemas por la Ñ
-    console.log(req.params);//
-    res.send('info de cuenta');
-})
+    console.log(req.ip);//
+    res.send('info de cuenta get 1');
+});
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////'headers' property
+expressServer.post('/mi-cuenta/:user/:password',(req,res)=>{//En ciertas ocaciones se requieren parametros en la ruta, por ejemplo identificadores de usuario, si ponemos solo '/mi-cuenta' no servirá de mucho porque es algo estatico, por lo tanto se utiliza ':idcuenta' para decirle a la función que todo lo que venga despues del : es lo que necesito como identificador
+    //Cuidado con los caracteres especiales en las rutas con valor dinamico, contraseña da muchos problemas por la Ñ
+    console.log(req.headers);//
+    console.log(req.get('user-agent'));// Utilizar el req.get para obtener valor de las cabeceras, se pueden almacenar en variables para operarlas según sea conveniente
+    res.send('info de cuenta get 2');
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//// Respondiendo solicitudes------------------------------------------------------------------------------------------------
+
+expressServer.get('/solicitud',(req,res)=>{
+    //console.log(res.status);
+    //res.send('Solicitud que de path "/solicitud" recibida')//-Solo se puede mandar una sola respuesta
+
+    res.status(401).send({//res.status para asignar un código de estatus y .send en este caso se agregó un objeto que puede ser puesto en el front mediante fetch o similares;
+        errorMessage:'No autorizado'
+    });
+    //console.log(res.status);
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//// Parsear el body------------------------------------------------------------------------------------------------
+
+//// Concepto middleware------------------------------------------------
+//Son funciones que se ejecutan de forma previa al endpoint y puede servir para multiples endpoints
+
+expressServer.use(createExpressServer.json());
+expressServer.use(createExpressServer.text());
+
+expressServer.get('/ejeplo-body',(req,res)=>{
+    console.log(req.body);
+    //res.status(200).send('ejeplo-body');
+    res.status(200).json({error:'usuario no encontrado'});
+});
