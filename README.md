@@ -40,7 +40,42 @@ import dotenv from "dotenv";
 dotenv.config({path:'./.env'});
 const appPORT = process.env.PORT || 3000; // Verifica si existe var PORT en .env y si no le asigna 3000;
 ```
+## Rounter en Express
+En Express, un router es una forma de organizar y estructurar las rutas y controladores de una aplicación web o API. Permite agrupar las rutas relacionadas en módulos separados, lo que facilita la modularidad y la escalabilidad del código.
 
+Un router en Express actúa como un middleware y puede manejar solicitudes HTTP para rutas específicas. Puedes pensar en un router como un "mini-aplicación" dentro de tu aplicación principal de Express.
+
+```javascript
+import express  from "express"; //router
+const accountRouter = express.Router();//router
+////////////////////////////////////////
+expressApp.use("/account",accountRouter); //Index, especificar la ruta "/account aquí permite que los middlewares del router no tengan efecto sobre otros endpoints del index.
+```
+
+## Middlewares en Express
+
+En Express, los middlewares son funciones que se ejecutan durante el procesamiento de una solicitud HTTP. Estas funciones tienen acceso al objeto `request` (req), al objeto `response` (res) y a la función `next()` que permite pasar el control al siguiente middleware en la cadena.
+
+### Funcionalidades de los middlewares
+
+Los middlewares en Express se utilizan para realizar una variedad de tareas, como:
+
+1. **Procesamiento de datos**: Los middlewares pueden analizar y manipular los datos de la solicitud antes de que sean manejados por las rutas o controladores. Por ejemplo, se pueden realizar validaciones, autenticación, autorización, transformación de datos, entre otros.
+
+2. **Manipulación de la respuesta**: Los middlewares también pueden modificar la respuesta antes de que se envíe al cliente. Pueden agregar encabezados personalizados, comprimir la respuesta, establecer cookies, entre otros.
+
+3. **Gestión de errores**: Los middlewares pueden manejar errores y devolver respuestas de error adecuadas al cliente. Esto puede incluir el manejo de excepciones, validaciones fallidas u otras situaciones de error.
+
+### Definición de un middleware en Express
+
+Un middleware en Express se define como una función que toma tres argumentos: `req`, `res` y `next`. `req` representa el objeto de solicitud, `res` representa el objeto de respuesta y `next` es una función que se llama para pasar el control al siguiente middleware en la cadena.
+
+```javascript
+const middlewareExample = (req, res, next) => {
+  // Código del middleware aquí
+  next(); // Llamada a next para pasar al siguiente middleware
+};
+```
 
 
 ## Node Docs
