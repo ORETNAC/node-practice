@@ -1,11 +1,11 @@
-import express  from "express";
+import {Router}  from "express";
 
-const accountRouter = express.Router();
+const accountRouter = Router();
 
 
 
 //Los middlewares se suelen ejecutar antes que el endpoint en si
-accountRouter.use((req,res,next)=>{
+accountRouter.use((req,res,next)=>{//Un middeware que solo hace un pequeño log de la IP
     console.log(req.ip);
     next();
 });

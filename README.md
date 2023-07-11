@@ -2,6 +2,11 @@
 
 José David Cantero Carreño
 
+## Índice
+
+- [Comandos recurrentes](#comandos-recurrentes)
+- [Router en Express](#router-en-express)
+- [Middlewares en Express](#middlewares-en-express)
 ## Comandos recurrentes
 
 A continuación, se presentan los comandos utilizados en el proyecto y una breve descripción de cada uno.
@@ -28,8 +33,22 @@ import express from 'express';
 const expressServer = express();
 expressServer.use(express.json()); // Este middleware es utilizado para analizar el cuerpo de las solicitudes entrantes en formato JSON. Al llamar a expressServer.use() y pasar express.json(), estás indicando que deseas utilizar este middleware en todas las solicitudes entrantes para analizar el cuerpo JSON y convertirlo en un objeto JavaScript accesible a través de req.body.
 expressServer.use(express.text());// Lo mismo pero en formato text
+
+
+
+
 ```
-### `npm i dotenv`
+
+```javascript
+expressApp.use('/testRouter',(req,res)=>{ 
+    res.send('El middleware del router no muestra la Ip')
+});
+/// EndPoint para más información: #rounter-en-express
+```
+- [Router en Express](#router-en-express)
+
+### `npm i dotenv` || `npm install dotenv`
+
 
 Este comando instala el paquete `dotenv` en el proyecto. `dotenv` es una biblioteca que te permite cargar variables de entorno desde un archivo `.env` en la aplicación Node.js. es útil para mantener información sensible, como credenciales de API, en un archivo separado y no hacerlas visibles en el código fuente.
 
@@ -40,7 +59,7 @@ import dotenv from "dotenv";
 dotenv.config({path:'./.env'});
 const appPORT = process.env.PORT || 3000; // Verifica si existe var PORT en .env y si no le asigna 3000;
 ```
-## Rounter en Express
+## Router en Express
 En Express, un router es una forma de organizar y estructurar las rutas y controladores de una aplicación web o API. Permite agrupar las rutas relacionadas en módulos separados, lo que facilita la modularidad y la escalabilidad del código.
 
 Un router en Express actúa como un middleware y puede manejar solicitudes HTTP para rutas específicas. Puedes pensar en un router como un "mini-aplicación" dentro de tu aplicación principal de Express.
@@ -48,8 +67,23 @@ Un router en Express actúa como un middleware y puede manejar solicitudes HTTP 
 ```javascript
 import express  from "express"; //router
 const accountRouter = express.Router();//router
+export default accountRouter;//router
 ////////////////////////////////////////
 expressApp.use("/account",accountRouter); //Index, especificar la ruta "/account aquí permite que los middlewares del router no tengan efecto sobre otros endpoints del index.
+```
+```javascript 
+//EndPoint, escalable Ubicado en un router
+accountRouter.patch('/:guid', (req, res) => {
+    const { guid } = req.params;
+    const { name } = req.body;
+    if (!name) return res.status(400).send('No envió el nombre');
+
+    const user = USERS_BBDD.find(user => user.guid === guid);
+    if (!user) return res.status(404).send('Usuario no encontrado');
+
+    user.name = name;
+    return res.send('Nombre cambiado');
+});
 ```
 
 ## Middlewares en Express
@@ -68,18 +102,10 @@ Los middlewares en Express se utilizan para realizar una variedad de tareas, com
 
 ### Definición de un middleware en Express
 
-Un middleware en Express se define como una función que toma tres argumentos: `req`, `res` y `next`. `req` representa el objeto de solicitud, `res` representa el objeto de respuesta y `next` es una función que se llama para pasar el control al siguiente middleware en la cadena.
+Un middleware en Express se define como una función que toma tres argumentos: `req`, `res` y `next`. `req` representa el objeto de solicitud, `res` representa el objeto de respuesta y `next` es una función que se llama para pasar el control al siguiente middleware en la cadena. hasta al finalizar llegar a los **EndPoints** en el Router para relizar su res.get/post/etc.
 
 ```javascript
 const middlewareExample = (req, res, next) => {
   // Código del middleware aquí
   next(); // Llamada a next para pasar al siguiente middleware
 };
-```
-
-
-## Node Docs
-https://nodejs.org/dist/latest-v18.x/docs/api/esm.html
-
-## Express Docs
-https://expressjs.com/es/4x/api.html#req.params
